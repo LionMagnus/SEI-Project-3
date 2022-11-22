@@ -16,6 +16,9 @@ class Event(models.Model):
   date = models.DateField('Event Date')
   evtLocation = models.CharField(max_length=50)
 
+  def get_absolute_url(self):
+        return reverse('detail', kwargs={'event_id': self.id})
+
 class Rental(models.Model):
   address = map_fields.AddressField(max_length=200)
   geolocation = map_fields.GeoLocationField(max_length=100)
