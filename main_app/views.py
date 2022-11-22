@@ -39,17 +39,18 @@ def events_index(request):
 
 def events_detail(request, event_id):
   event = Event.objects.get(id=event_id)
-  id_list = event.toys.all().values_list('id')
-  return render(request, 'events/detail.html')
+  return render(request, 'events/detail.html', {
+    'event': event
+  })
   
 
 class EventCreate(CreateView):
   model = Event
-  fields = ['eventTitle', 'date', 'evtLocation']
+  fields = ['eventTitle', 'description', 'date', 'evtLocation']
 
 class EventUpdate(UpdateView):
   model = Event
-  fields = ['eventTitle', 'date', 'evtLocation']
+  fields = ['eventTitle', 'description', 'date', 'evtLocation']
 
 class EventDelete(DeleteView):
   model = Event
