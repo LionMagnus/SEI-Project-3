@@ -15,9 +15,15 @@ class Event(models.Model):
   description = models.TextField(max_length=2000)
   date = models.DateField('Event Date')
   evtLocation = models.CharField(max_length=50)
+  def __str__(self):
+    return f'{self.eventTitle} ({self.id})'
 
   def get_absolute_url(self):
         return reverse('detail', kwargs={'event_id': self.id})
+
+class Comment(models.Model):
+    comment = models.TextField(max_length=1000)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
 class Rental(models.Model):
   address = map_fields.AddressField(max_length=200)
