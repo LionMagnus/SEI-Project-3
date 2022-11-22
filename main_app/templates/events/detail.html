@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Event Details</h1>
+
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ event.eventTitle }}</span>
+        <p>Description: {{ event.description }}</p>
+        <p>Location: {{ event.evtLocation|linebreaks }}</p>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'events_update' event.id %}">Edit</a>
+        <a href="{% url 'events_delete' event.id %}">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const dateEl = document.getElementById('id_date');
+  M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+</script>
+{% endblock %}
