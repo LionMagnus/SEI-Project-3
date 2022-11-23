@@ -19,6 +19,21 @@
   </div>
 </div>
 
+<div class="col">
+  <form action="{% url 'events_comments' event.id %}" class="form"  method="POST">
+    {% csrf_token %}
+    {{ comments_form.as_p }}
+    <input type="submit" value="Submit!" class="btn">
+  </form>
+  <table>
+    {% for comment in event.comment_set.all %}
+    <tr>
+      <td>{{ comment.comment }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
 <script>
   const dateEl = document.getElementById('id_date');
   M.Datepicker.init(dateEl, {
