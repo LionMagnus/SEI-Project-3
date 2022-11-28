@@ -1,5 +1,5 @@
 from django.db import models
-from django_google_maps import fields as map_fields
+# from django_google_maps import fields as map_fields
 from django.urls import reverse
 from datetime import date
 from django.contrib.auth.models import User
@@ -24,7 +24,11 @@ class Event(models.Model):
 class Comment(models.Model):
   comment = models.TextField(max_length=1000)
   event = models.ForeignKey(Event, on_delete=models.CASCADE)
+  created_on = models.DateTimeField(auto_now_add=True)
+  active = models.BooleanField(default=False)
+  class Meta:
+    ordering = ['created_on']
 
-class Rental(models.Model):
-  address = map_fields.AddressField(max_length=200)
-  geolocation = map_fields.GeoLocationField(max_length=100)
+# class Rental(models.Model):
+#   address = map_fields.AddressField(max_length=200)
+#   geolocation = map_fields.GeoLocationField(max_length=100)

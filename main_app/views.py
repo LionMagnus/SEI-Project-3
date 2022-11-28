@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .models import Event
+from .models import Event, Comment
 #from .forms import FeedingForm
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from .forms import CommentForm
 
 # Create your views here.
 def home(request):
@@ -39,9 +40,19 @@ def events_index(request):
 
 def events_detail(request, event_id):
   event = Event.objects.get(id=event_id)
+  comments_form = CommentForm()
   return render(request, 'events/detail.html', {
-    'event': event
+    'event': event,
+    'comments_form': comments_form,
   })
+
+def events_comments(request, event_id):
+  form = CommentForm(request.POST)
+  if form.is_valid():
+    new_comment = form.save(commit=False)
+    new_comment.event_id = event_id 
+    new_comment.save()
+  return redirect('detail', event_id = event_id) 
   
 
 class EventCreate(CreateView):
@@ -54,4 +65,18 @@ class EventUpdate(UpdateView):
 
 class EventDelete(DeleteView):
   model = Event
+  success_url = '/events'
+
+class CommentCreate(CreateView):
+  model = Comment
+  fields = ['__all__']
+
+
+class CommentUpdate(UpdateView):
+  model = Comment
+  fields = ['comment']
+  
+
+class CommentDelete(DeleteView):
+  model = Comment
   success_url = '/events'
