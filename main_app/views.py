@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from .models import Event, Comment
-#from .forms import FeedingForm
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CommentForm
+
 
 # Create your views here.
 def home(request):
