@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .models import Event, Comment
+from .models import Event, Comment, User
+#from .forms import FeedingForm
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CommentForm
@@ -58,6 +59,10 @@ def events_comments(request, event_id):
 class EventCreate(CreateView):
   model = Event
   fields = ['eventTitle', 'description', 'date', 'evtLocation']
+  def form_valid(self, form):
+    print(self.request.user)
+    form.instance.organizer = User.objects.get(username=self.request.user)
+    return super().form_valid(form)
 
 class EventUpdate(UpdateView):
   model = Event

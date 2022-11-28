@@ -4,16 +4,18 @@ from datetime import date
 from django.contrib.auth.models import User
 
 # Create your models here.
-class User(models.Model):
-  name = models.CharField(max_length=40)
-  age = models.IntegerField()
-  location = models.CharField(max_length=30)
+# class User(models.Model):
+#   name = models.CharField(max_length=40)
+#   age = models.IntegerField()
+#   location = models.CharField(max_length=30)
 
 class Event(models.Model):
   eventTitle = models.CharField(max_length=100)
   description = models.TextField(max_length=2000)
   date = models.DateField('Event Date')
   evtLocation = models.CharField(max_length=50)
+  organizer = models.ForeignKey(User, on_delete=models.CASCADE)
+  
   def __str__(self):
     return f'{self.eventTitle} ({self.id})'
 
@@ -25,6 +27,8 @@ class Comment(models.Model):
   event = models.ForeignKey(Event, on_delete=models.CASCADE)
   created_on = models.DateTimeField(auto_now_add=True)
   active = models.BooleanField(default=False)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+
   class Meta:
     ordering = ['created_on']
 
