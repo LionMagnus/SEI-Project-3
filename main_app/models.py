@@ -22,8 +22,8 @@ class Event(models.Model):
         return reverse('detail', kwargs={'event_id': self.id})
 
 class Comment(models.Model):
-    comment = models.TextField(max_length=1000)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+  comment = models.TextField(max_length=1000)
+  event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
 class Rental(models.Model):
   address = map_fields.AddressField(max_length=200)
