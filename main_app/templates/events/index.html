@@ -10,6 +10,11 @@
         <p>Description: {{ event.description|linebreaks }}</p>
         <p>Date: {{ event.date }}</p>
         <p>Location: {{ event.evtLocation|linebreaks }}</p>
+        {% if event.photo_set.count %}
+          <div class="card-image">
+            <img id="calendar-img" class="responsive-img" src="{{ event.photo_set.first.url }}" alt="photo of {{ event.eventTitle }}">
+          </div>
+        {% endif%}
       </div>
     </div>
   </a>
