@@ -50,6 +50,7 @@ def events_comments(request, event_id):
   form = CommentForm(request.POST)
   if form.is_valid():
     new_comment = form.save(commit=False)
+    new_comment.user = request.user
     new_comment.event_id = event_id 
     new_comment.save()
   return redirect('detail', event_id = event_id) 
