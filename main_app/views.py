@@ -102,7 +102,9 @@ class CommentUpdate(UpdateView):
 
 class CommentDelete(DeleteView):
   model = Comment
-  success_url = '/events'
+  def get_success_url(self):
+    print("success")
+    return f"/events/{self.object.event.id}"
 
 class AttendeesList(ListView):
     model = User
