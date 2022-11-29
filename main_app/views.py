@@ -7,6 +7,7 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CommentForm
 
+
 # Create your views here.
 def home(request):
   return render(request, 'home.html')
