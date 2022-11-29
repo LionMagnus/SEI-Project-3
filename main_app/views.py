@@ -1,8 +1,10 @@
+import uuid
+import boto3
+import os
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .models import Event, Comment, User
-#from .forms import FeedingForm
+from .models import Event, Comment, User, Photo
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CommentForm
@@ -41,10 +43,12 @@ def events_index(request):
 
 def events_detail(request, event_id):
   event = Event.objects.get(id=event_id)
+  attendees = User.objects.exclude(id__in = event.attendees.all().values_list('id'))
   comments_form = CommentForm()
   return render(request, 'events/detail.html', {
     'event': event,
     'comments_form': comments_form,
+    'attendees': attendees
   })
 
 def events_comments(request, event_id):
@@ -73,16 +77,37 @@ class EventDelete(DeleteView):
   model = Event
   success_url = '/events'
 
+def add_photo(request, event_id):
+  photo_file = request.FILES.get('photo-file', None)
+  if photo_file:
+    s3 = boto3.client('s3')
+    key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+    try:
+      bucket = os.environ['S3_BUCKET']
+      s3.upload_fileobj(photo_file, bucket, key)
+      url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
+      Photo.objects.create(url=url, event_id=event_id)
+    except Exception as e:
+      print('An error occurred uploading file to S3')
+      print(e)
+  return redirect('detail', event_id=event_id)
+
 class CommentCreate(CreateView):
   model = Comment
   fields = ['__all__']
 
-
 class CommentUpdate(UpdateView):
   model = Comment
   fields = ['comment']
-  
 
 class CommentDelete(DeleteView):
   model = Comment
   success_url = '/events'
+
+class AttendeesList(ListView):
+    model = User
+    fields = '__all__'
+
+def assoc_user(request, event_id, user_id):
+    Event.objects.get(id=event_id).attendees.add(user_id)
+    return redirect('detail', event_id=event_id)

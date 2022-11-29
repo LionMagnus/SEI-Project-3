@@ -8,16 +8,77 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">{{ event.eventTitle }}</span>
+        {% for photo in event.photo_set.all %}
+          <img class="responsive-img card-panel" src="{{photo.url}}">
+        {% empty %}
+          <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+        {% endfor %}
         <p>Description: {{ event.description }}</p>
+        <p>Organizer: {{ event.organizer }}</p>
+        <p>Event Date: {{ event.date }}</p>
         <p>Location: {{ event.evtLocation|linebreaks }}</p>
       </div>
+      {% if event.organizer == request.user %}
       <div class="card-action">
         <a href="{% url 'events_update' event.id %}">Edit</a>
         <a href="{% url 'events_delete' event.id %}">Delete</a>
       </div>
+      {% endif %}
+      <form action="{% url 'add_photo' event.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
+        {% csrf_token %}
+        <div>
+        <input type="file" name="photo-file">
+        </div>
+        <br>
+        <br>
+        <button type="submit" class="btn"><i class="material-icons right">cloud</i>Upload Photo</button>
+      </form>
     </div>
   </div>
 </div>
+<div class="card">
+  <div class="card-content">
+    <h3>{{ event.eventTitle }}'s Attendees</h3>
+    {% if event.attendees.count %}
+      {% for attendee in event.attendees.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+             {{ attendee.username }}
+            </span>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>No Attendees :(</h5>
+    {% endif %}
+  </div>
+  <div class="col s6">
+    <h3>Available Attendees</h3>
+    {% if attendees.count %}
+      {% for attendee in attendees.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+             {{ attendee.username }}
+            </span>
+          </div>
+          {% if attendee == request.user %}
+          <div class="card-action">
+            <form action="{% url 'assoc_user' event.id attendee.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn">Add</button>
+            </form>
+          </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>Everyone's coming!</h5>
+    {% endif %}
+  </div>
+</div>
+
 <div class="col">
   <form action="{% url 'events_comments' event.id %}" class="form"  method="POST">
     {% csrf_token %}
@@ -25,20 +86,20 @@
     <input type="submit" value="Submit!" class="btn">
   </form>
   <table>
-    {% for comment in event.comment_set.all %}
-    <tr>
-      <td>{{ comment.comment }}</td>
-    </tr>
-    {% endfor %}
+    {% if event.comment_set.count %}
+      {% for comment in event.comment_set.all %}
+      <tr>
+        <td>{{ comment.user }}</td>
+        <td>{{ comment.comment }}</td>
+        {% if comment.user == request.user %}
+        <td><a href="{% url 'comments_delete' comment.id %}">Delete</a></td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    {% else %}
+    <h4>No Comments Yet</h4>
+    {% endif%}
   </table>
 </div>
-<script>
-  const dateEl = document.getElementById('id_date');
-  M.Datepicker.init(dateEl, {
-    format: 'yyyy-mm-dd',
-    defaultDate: new Date(),
-    setDefaultDate: true,
-    autoClose: true
-  });
-</script>
+
 {% endblock %}
