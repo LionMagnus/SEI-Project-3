@@ -8,6 +8,8 @@ not enought clarity in communication
 The solution? THE EVENT.
 
 ![theevent](/main_app/static/pictures/theevent1.png)
+![theevent1](/main_app/static/pictures/Screen%20Shot%202022-11-30%20at%2011.46.16%20AM.png)
+![thevent2](/main_app/static/pictures/Screen%20Shot%202022-11-30%20at%2011.46.42%20AM.png)
 
 The Event is an app that is designed to help users make planning easy! 
 
