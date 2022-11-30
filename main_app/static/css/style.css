@@ -3,7 +3,7 @@ body {
   min-height: 100vh;
   flex-direction: column;
   background-color: rgb(69, 79, 81);
-  color: white;
+  color: rgb(57, 121, 137);
   font-family: 'Courier New', Courier, monospace;
 }
 
@@ -62,7 +62,7 @@ img{
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 100%;
+  width: 150%;
 }
 
 .button {
@@ -73,13 +73,6 @@ img{
   background-color: rgb(235, 228, 192);
   display: block;
   color: black;
-}
-
-.card-content {
-  justify-content: center;
-  display: flex;
-  justify-items: center;
-  margin-top: 15px;
 }
 
 h6 {
