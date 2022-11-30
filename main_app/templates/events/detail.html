@@ -13,10 +13,13 @@
         {% empty %}
           <div class="card-panel teal-text center-align">No Photos Uploaded</div>
         {% endfor %}
-        <p>Description: {{ event.description }}</p>
-        <p>Organizer: {{ event.organizer }}</p>
-        <p>Event Date: {{ event.date }}</p>
-        <p>Location: {{ event.evtLocation|linebreaks }}</p>
+        <p><em>Description:</em> {{ event.description }}</p>
+        <br>
+        <p><em>Organizer:</em> {{ event.organizer }}</p>
+        <br>
+        <p><em>Event Date:</em> {{ event.date }}</p>
+        <br>
+        <p><em>Location:</em> {{ event.evtLocation|linebreaks }}</p>
       </div>
       {% if event.organizer == request.user %}
       <div class="card-action">
@@ -31,14 +34,15 @@
         </div>
         <br>
         <br>
-        <button type="submit" class="btn"><i class="material-icons right">cloud</i>Upload Photo</button>
+        <button type="submit" class="btn"><i class="material-icons center-align"></i>Upload Photo</button>
       </form>
     </div>
   </div>
 </div>
 <div class="card">
   <div class="card-content">
-    <h3>{{ event.eventTitle }}'s Attendees</h3>
+    <h5>{{ event.eventTitle }}'s Attendees</h5>
+    <hr>
     {% if event.attendees.count %}
       {% for attendee in event.attendees.all %}
         <div class="card">
@@ -50,11 +54,15 @@
         </div>
       {% endfor %}
     {% else %}
-      <h5>No Attendees :(</h5>
+    <br>
+      <h6>No Attendees ☹️</h6>
     {% endif %}
   </div>
-  <div class="col s6">
-    <h3>Available Attendees</h3>
+  <br>
+  <div class="col s12 m6 14">
+    <div class="card-panel">
+    <h5>Available Attendees</h5>
+    <hr>
     {% if attendees.count %}
       {% for attendee in attendees.all %}
         <div class="card">
@@ -74,18 +82,20 @@
         </div>
       {% endfor %}
     {% else %}
-      <h5>Everyone's coming!</h5>
+      <h6>Everyone's coming! 🥳</h6>
+      <br>
     {% endif %}
+    </div>
   </div>
 </div>
 
 <div class="col">
-  <form action="{% url 'events_comments' event.id %}" class="form"  method="POST">
+  <form action="{% url 'events_comments' event.id %}" class="form"  method="POST" style="color: white;">
     {% csrf_token %}
     {{ comments_form.as_p }}
     <input type="submit" value="Submit!" class="btn">
   </form>
-  <table>
+  <table class="commentstable">
     {% if event.comment_set.count %}
       {% for comment in event.comment_set.all %}
       <tr>
@@ -97,7 +107,7 @@
       </tr>
       {% endfor %}
     {% else %}
-    <h4>No Comments Yet</h4>
+    <h6>No Comments Yet</h6>
     {% endif%}
   </table>
 </div>
